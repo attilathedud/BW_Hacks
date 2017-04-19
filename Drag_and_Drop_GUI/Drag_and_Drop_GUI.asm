@@ -47,80 +47,80 @@ wr db 0
 		; Store this location in ebx.
 		push eax
 		push 40h
-	    push 1000h
-	    push 4h
-	    push 0
-	    call VirtualAlloc 
+		push 1000h
+		push 4h
+		push 0
+		call VirtualAlloc 
 		mov ebx,eax
 
 		; Unprotect the memory at 48cf79h-48cf7eh
-	    push ebx
-	    push 40h
-	    push 5h
-	    push 48cf79h
-	    call VirtualProtect 
+		push ebx
+		push 40h
+		push 5h
+		push 48cf79h
+		call VirtualProtect 
 
 		; Create a codecave in the drawing routine that will jmp to our hook function.
 		; e9h is the opcode to jmp, with the address of the jump being calculated by subtracting
 		; the address of the function to jump to from our current location.
-	    mov byte ptr ds:[48cf79h],0e9h
-	    lea ecx,@hook
-	    sub ecx,48cf7eh
-	    mov dword ptr ds:[48cf7ah],ecx
+		mov byte ptr ds:[48cf79h],0e9h
+		lea ecx,@hook
+		sub ecx,48cf7eh
+		mov dword ptr ds:[48cf7ah],ecx
 
 		; Reprotect the memory we just wrote.
-	    push 0
-	    push dword ptr ds:[ebx]
-	    push 5h
-	    push 48cf79h
-	    call VirtualProtect 
+		push 0
+		push dword ptr ds:[ebx]
+		push 5h
+		push 48cf79h
+		call VirtualProtect 
 
 		; Unprotect the memory at 41e287h - 41e28ch
-	    push ebx
-	    push 40h
-	    push 5h
-	    push 41e287h
-	    call VirtualProtect 
+		push ebx
+		push 40h
+		push 5h
+		push 41e287h
+		call VirtualProtect 
 
 		; Create a codecave in the refresh routine that will jmp to our refresh hook function.
-	    mov byte ptr ds:[41e287h],0e9h
-	    lea ecx,@refresh
-	    sub ecx,41e28ch
-	    mov dword ptr ds:[41e288h],ecx
-	    mov byte ptr ds:[41e28ch],90h
+		mov byte ptr ds:[41e287h],0e9h
+		lea ecx,@refresh
+		sub ecx,41e28ch
+		mov dword ptr ds:[41e288h],ecx
+		mov byte ptr ds:[41e28ch],90h
 
 		; Reprotect the memory we just wrote.
-	    push 0
-	    push dword ptr ds:[ebx]
-	    push 5h
-	    push 41e287h
-	    call VirtualProtect 
+		push 0
+		push dword ptr ds:[ebx]
+		push 5h
+		push 41e287h
+		call VirtualProtect 
 
 		; Unprotect the memory at 4d235dh - 4d2361h
-	   	push ebx
-	    push 40h
-	    push 4h
-	    push 4d235dh
-	    call VirtualProtect 
+		push ebx
+		push 40h
+		push 4h
+		push 4d235dh
+		call VirtualProtect 
 
 		; Create a codecave in the routine that checks for mouse input that will jmp to our mouse hook.
 		; Because this is already a call instruction we only need to write the destination opcodes.
-	    lea ecx,@mouse_hook
-	    sub ecx,4d2361h
-	    mov dword ptr ds:[4d235dh],ecx
+		lea ecx,@mouse_hook
+		sub ecx,4d2361h
+		mov dword ptr ds:[4d235dh],ecx
 
 		; Reprotect the memory we just wrote.
-	    push 0
-	    push dword ptr ds:[ebx]
-	    push 4h
-	    push 4d235dh
-	    call VirtualProtect 
+		push 0
+		push dword ptr ds:[ebx]
+		push 4h
+		push 4d235dh
+		call VirtualProtect 
 
 		; Free the memory we allocated for our protection type.
-	    push 4000h
-	    push 4h
-	    push ebx
-	    call VirtualFree 
+		push 4000h
+		push 4h
+		push ebx
+		call VirtualFree 
 
 		; Restore eax and the stack
 		pop eax
