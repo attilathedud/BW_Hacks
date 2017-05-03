@@ -88,15 +88,15 @@ HANDLE inject(DWORD pid, char* dllname)
 void AdjustTokenPrivs(void)
 {
 	HANDLE token;
-    LUID luid;
-    TOKEN_PRIVILEGES tp;
+	LUID luid;
+	TOKEN_PRIVILEGES tp;
 
 	OpenProcessToken(GetCurrentProcess(), 40, &token);
 	LookupPrivilegeValue(NULL, "SeDebugPrivilege", &luid);
 
 	tp.PrivilegeCount = 1;
-    tp.Privileges[0].Luid = luid;
-    tp.Privileges[0].Attributes = 2;
+	tp.Privileges[0].Luid = luid;
+	tp.Privileges[0].Attributes = 2;
 
 	AdjustTokenPrivileges(token, FALSE, &tp, 28, NULL, NULL);
 }
